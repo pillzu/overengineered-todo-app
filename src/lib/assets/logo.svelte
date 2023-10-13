@@ -1,0 +1,18 @@
+<svg
+	width="2em"
+	height="2em"
+	viewBox="0 0 200 200"
+	fill="currentColor"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<circle cx="48.2072" cy="48.2077" r="48.2072" fill="text-surface" />
+	<circle cx="151.793" cy="151.793" r="48.2072" fill="text-surface" />
+	<path
+		d="M0 103.586H96.4143V149.004C96.4143 177.169 73.5826 200.001 45.4183 200.001H0V103.586Z"
+		fill="text-surface"
+	/>
+	<path
+		d="M103.586 50.9965C103.586 22.8322 126.417 0.000488281 154.582 0.000488281H200V96.4148H103.586V50.9965Z"
+		fill="text-surface"
+	/>
+</svg>
