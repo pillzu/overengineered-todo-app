@@ -1,9 +1,21 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
+import type { SupabaseClient, Session } from "@supabase/supabase-js";
+import { Database } from "./database.types";
+
 // and what to do when importing types
-declare namespace App {
-	// interface Locals {}
-	// interface PageData {}
-	// interface Error {}
-	// interface Platform {}
+declare global {
+	declare namespace App {
+		interface Locals {
+			supabase: SupabaseClient<Database>,
+			getSession(): Promise<Session | null>
+			session: Session | null,
+		}
+		interface PageData {
+			session: Session | null,
+		}
+		// interface Error {}
+		// interface Platform {}
+	}
 }

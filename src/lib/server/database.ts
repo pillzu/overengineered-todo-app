@@ -35,7 +35,6 @@ export function removeTodo(id: number) {
 
 export function completeTodo(id: number, complete: boolean) {
   const todo = todos.find((td) => td.id === id)
-  console.log(todos, complete)
   if (todo) {
     todo.completed = complete
   }
