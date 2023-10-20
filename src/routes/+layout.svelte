@@ -46,12 +46,14 @@
 
 <div class="flex flex-col h-screen">
 	<header class="flex justify-between py-5 px-5 align-middle">
-		<div class="flex justify-center h-full align-middle">
-			<span class="pr-2">
-				<Logo />
-			</span>
-			<h1 class="uppercase h4">Do-to</h1>
-		</div>
+		<a href="/">
+			<div class="flex justify-center h-full align-middle">
+				<span class="pr-2">
+					<Logo />
+				</span>
+				<h1 class="uppercase h4">Do-to</h1>
+			</div>
+		</a>
 		<div class="flex flex-row items-center">
 			{#if session}
 				<button

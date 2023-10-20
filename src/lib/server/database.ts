@@ -1,45 +1,55 @@
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 type Todo = {
-  id: number
+  id?: number
   text: string
+  user_id?: string
   completed: boolean
 }
 
-
-let todos: Todo[] = [
-  {
-    id: Date.now(),
-    text: "Hello world",
-    completed: false,
-
+export async function getTodos(sb: SupabaseClient) {
+  const { error: err, data: todos } = await sb.from('todos').select("id, text, completed").order('created_at')
+  const res = { message: "", todos }
+  if (err) {
+    res.message = `Unable to fetch todo's! ${err.message}`
   }
-]
-
-export function getTodos() {
-  return todos
+  return res
 }
 
-export function addTodo(text: string) {
-  const todo:Todo = {
+export async function addTodo(sb: SupabaseClient, text: string, user_id: string | undefined) {
+  const todo: Todo = {
     text,
-    id: Date.now(),
-    completed:false,
-
+    user_id,
+    completed: false,
   }
-  todos.push(todo)
-}
-
-export function removeTodo(id: number) {
-  todos = todos.filter((td) => td.id !== id)
-}
-
-export function completeTodo(id: number, complete: boolean) {
-  const todo = todos.find((td) => td.id === id)
-  if (todo) {
-    todo.completed = complete
+  const { error: err, data: todos } = await sb.from('todos').insert(todo)
+  const res = { message: "", todos }
+  if (err) {
+    res.message = `Unable to add todo! ${err.message}`
   }
+
+  return res
 }
 
-export function clearTodos() {
-  todos = []
+export async function removeTodo(sb: SupabaseClient, id: number) {
+  const { error: err } = await sb.from('todos').delete().eq('id', id)
+  const res = {message: ""}
+  if (err) {
+    res.message = `Unable to delete todo! ${err.message}`
+  }
+
+  return res
+}
+
+export async function completeTodo(sb:SupabaseClient, id: number, completed: boolean) {
+  const newTodo = {completed: completed}
+  const data = await sb.from('todos').update(newTodo).eq('id', id)
+  const err = data.error
+  console.log( data)
+  const res = {message: ""}
+  if (err) {
+    res.message = `Unable to complete todo! ${err.message}`
+  }
+
+  return res
 }

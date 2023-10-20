@@ -11,6 +11,8 @@
 	export let form: ActionData;
 	export let data: PageData;
 
+	export const username = data.session?.user.user_metadata.full_name;
+
 	$: if (form?.success) {
 		const t: ToastSettings = {
 			message: form?.message,
@@ -49,11 +51,15 @@
 	}
 </script>
 
-<section class="pb-10 mt-40 w-full">
+<section class="pb-10 mt-32 w-full">
 	<div class="grid gap-10 place-items-center w-full text-center content">
 		<h1 class="text-6xl text-surface h1">Welcome to dO-t0</h1>
 		<p class="font-thin tracking-widest text-surface">
-			Your <span class="code">very-own</span> To-Do Manager
+			{#if username}
+				{username}'s
+			{:else}
+				Your <span class="code">very-own</span>
+			{/if} To-Do Manager
 		</p>
 		<form method="POST" action="?/add" class="md:w-3/4 lg:w-1/2" use:enhance>
 			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
@@ -99,7 +105,7 @@
 			{/each}
 			{#if data.todos.length == 0}
 				<p
-					class="mb-5 text-xl font-medium text-gray-500"
+					class="mb-5 text-xl font-medium text-center text-gray-500"
 					in:scale={{ delay: 1000 }}
 					out:fly={{ y: 200 }}
 				>
