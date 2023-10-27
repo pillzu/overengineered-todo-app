@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import { goto, invalidate } from '$app/navigation';
 	import { fade } from 'svelte/transition';
+	import { enhance } from '$app/forms';
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	initializeStores();
@@ -56,6 +57,11 @@
 		</a>
 		<div class="flex flex-row items-center">
 			{#if session}
+				<form action="/checkout" method="POST" use:enhance>
+					<button transition:fade type="submit" class="mr-5 btn variant-ghost-tertiary"
+						>+ 50 Credits</button
+					>
+				</form>
 				<button
 					transition:fade
 					type="button"

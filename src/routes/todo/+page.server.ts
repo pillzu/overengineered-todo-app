@@ -1,10 +1,12 @@
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { addTodo, completeTodo, getTodos, removeTodo } from "$lib/server/database";
+import { addTodo, completeTodo, getTodos, removeTodo } from "$lib/server/todo";
 import { error } from "console";
 
-export const load: PageServerLoad = async ({ locals: { supabase: sb, getSession } }) => {
-	const { message, todos } = await getTodos(sb);
+export const load: PageServerLoad = async ({ fetch, locals: { supabase: sb} }) => {
+	const {message, user} = await fetch("/api/user", {
+		method: "GET",
+	}).then(res => res.json())
 
 	if (message !== "") {
 		throw error(500, {
@@ -12,7 +14,15 @@ export const load: PageServerLoad = async ({ locals: { supabase: sb, getSession 
 		});
 	}
 
-	return { todos }
+	const {message:msg, todos } = await getTodos(sb);
+
+	if (msg !== "") {
+		throw error(500, {
+			msg
+		});
+	}
+
+	return { todos, user }
 }
 
 export const actions: Actions = {
@@ -27,10 +37,13 @@ export const actions: Actions = {
 
 		const session = await getSession()
 
-		await addTodo(sb, todo, session?.user.id);
+		const {message} = await addTodo(sb, todo, session?.user.id);
+
+		if (message !== "") {
+			return {success: false, message}
+		}
 
 		return { success: true, message: "Todo added successfully" }
-
 	},
 
 	remove: async ({ request, locals: { supabase: sb } }) => {

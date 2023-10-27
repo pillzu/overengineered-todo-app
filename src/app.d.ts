@@ -2,7 +2,6 @@
 // for information about these interfaces
 
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
-import { Database } from "./database.types";
 
 // and what to do when importing types
 declare global {

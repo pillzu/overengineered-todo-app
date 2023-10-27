@@ -36,27 +36,58 @@ export interface Database {
     Tables: {
       todos: {
         Row: {
+          completed: boolean
           created_at: string
-          description: string
           id: number
+          text: string
           user_id: string | null
         }
         Insert: {
+          completed?: boolean
           created_at?: string
-          description: string
           id?: number
+          text: string
           user_id?: string | null
         }
         Update: {
+          completed?: boolean
           created_at?: string
-          description?: string
           id?: number
+          text?: string
           user_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "todos_user_id_fkey"
             columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      users: {
+        Row: {
+          first_name: string | null
+          id: string
+          last_name: string | null
+          tokens: number
+        }
+        Insert: {
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          tokens?: number
+        }
+        Update: {
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          tokens?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
             referencedRelation: "users"
             referencedColumns: ["id"]
           }

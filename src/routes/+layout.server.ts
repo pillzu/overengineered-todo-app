@@ -4,5 +4,4 @@ export const load = async ({ locals: { getSession } }): Promise<{ session: Sessi
 	return {
 		session: await getSession(),
 	}
-
 }

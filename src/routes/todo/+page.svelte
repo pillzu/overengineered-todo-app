@@ -4,16 +4,48 @@
 	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { invalidateAll } from '$app/navigation';
 	import { fade, fly, scale } from 'svelte/transition';
+	import { page } from '$app/stores';
+
 	import NoData from '$lib/assets/no_data.svelte';
 
+	const paymentSuccess = $page.url.searchParams.get('payment');
 	const toastStore = getToastStore();
 
 	export let form: ActionData;
 	export let data: PageData;
 
-	export const username = data.session?.user.user_metadata.full_name;
+	let username = data.user.first_name;
 
-	$: if (form?.success) {
+	if (paymentSuccess === 'true') {
+		let message = `Yay! Your credits should be updated now.`;
+		const t: ToastSettings = {
+			message,
+			background: 'variant-soft-success',
+			hideDismiss: true,
+			timeout: 1000
+		};
+		toastStore.trigger(t);
+	} else if (paymentSuccess !== null) {
+		let message = `Oops! Please contact support if you paid but don't see the merchandise`;
+		const t: ToastSettings = {
+			message,
+			background: 'variant-soft-error',
+			hideDismiss: true,
+			timeout: 1000
+		};
+		toastStore.trigger(t);
+	}
+
+	$: if (form?.missing) {
+		let message = `To-do is missing! Please try again`;
+		const t: ToastSettings = {
+			message,
+			background: 'variant-soft-error',
+			hideDismiss: true,
+			timeout: 1000
+		};
+		toastStore.trigger(t);
+	} else if (form?.success) {
 		const t: ToastSettings = {
 			message: form?.message,
 			background: 'variant-soft-primary',
@@ -21,14 +53,10 @@
 			timeout: 1000
 		};
 		toastStore.trigger(t);
-	} else if (form?.missing) {
-		let message = `To-do is missing! Please try again`;
-		if (form?.id) {
-			message = 'Unable to remove to-do';
-		}
+	} else if (!form?.success && form?.message) {
 		const t: ToastSettings = {
-			message,
-			background: 'variant-filled-error',
+			message: form?.message,
+			background: 'variant-soft-error',
 			hideDismiss: true,
 			timeout: 1000
 		};
@@ -61,6 +89,7 @@
 				Your <span class="code">very-own</span>
 			{/if} To-Do Manager
 		</p>
+		<p><b>Credits left: </b> {data.user.tokens}</p>
 		<form method="POST" action="?/add" class="md:w-3/4 lg:w-1/2" use:enhance>
 			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 				<div class="input-group-shim variant-soft-surface">📃</div>
