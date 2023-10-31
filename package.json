@@ -40,6 +40,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.5.3",
     "@supabase/auth-helpers-sveltekit": "^0.10.3",
-    "@supabase/supabase-js": "^2.38.1"
+    "@supabase/supabase-js": "^2.38.1",
+    "stripe": "^14.1.0"
   }
 }
